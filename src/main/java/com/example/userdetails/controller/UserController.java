@@ -4,6 +4,10 @@ import com.example.userdetails.repository.*;
 import com.example.userdetails.dto.LoginRequest;
 import com.example.userdetails.model.User;
 import com.example.userdetails.service.UserService;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +21,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private NewsController news;
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
@@ -32,6 +37,15 @@ public class UserController {
     	
     	if (user != null && user.getPassword().equals(loginrequest.getPassword()))
     	{
+    		List<String> sports=user.getSports();
+    		String spo=sports.stream().collect(Collectors.joining(","));
+    		List<String> activities=user.getExtracurricularActivities();
+    		String act=activities.stream().collect(Collectors.joining(","));
+    		List<String> tech=user.getTechnology();
+    		String tc=tech.stream().collect(Collectors.joining(","));
+    		String intrest=spo+","+act+","+tc;
+    		news.setintrest(intrest);
+    		
     		
     		return ResponseEntity.ok("Login successful");
     	}
