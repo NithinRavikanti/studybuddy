@@ -24,7 +24,7 @@ public class TopicService {
 	    
 	    
 	    public List<Topic> getTopicsWithEmptyDescription() {
-	        return topicRepository.findAllByDescriptionEquals("");
+	        return topicRepository.findAllByDescriptionEquals(null);
 	    }
 	    
 	    @EventListener(ApplicationReadyEvent.class)
@@ -41,6 +41,7 @@ public class TopicService {
 	    	new Thread(() -> {
 	    		while (isRunning) {
 	    			 List<Topic> topics = getTopicsWithEmptyDescription();
+	    			 System.out.println(topics);
 	    			 if (topics.isEmpty()) {
 	                     isRunning = false; // Stop if no topics are left
 	                     break;
@@ -64,6 +65,7 @@ public class TopicService {
 	    private static final String OLLEMA_CHAT_API_URL = "http://localhost:8081/ai/prompt";
 	    private String fetchDescriptionFromOllemaChat(String topicName)
 	    {
+	    	System.out.println(topicName);
 	    	 String url = OLLEMA_CHAT_API_URL + "?prompt=" + topicName;
 	    	 return restTemplate.getForObject(url, String.class);
 	    }

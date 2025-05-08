@@ -23,13 +23,13 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private NewsController news;
-
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
     	 System.out.println("Received user data: " + user);
         User registeredUser = userService.registerUser(user);
         return ResponseEntity.ok(registeredUser);
     }
+   
     @PostMapping("/login")
     public ResponseEntity<String> loginuser(@RequestBody LoginRequest loginrequest)
     {
